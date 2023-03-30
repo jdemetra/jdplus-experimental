@@ -9,6 +9,6 @@ module jdplus.businesscycle.base.core {
     requires jdplus.toolkit.base.api;
     requires jdplus.toolkit.base.core;
 
-    exports jdplus.businesscycle;
-    exports jdplus.businesscycle.regular;
+    exports jdplus.businesscycle.base.core;
+    exports jdplus.businesscycle.base.core.regular;
 }

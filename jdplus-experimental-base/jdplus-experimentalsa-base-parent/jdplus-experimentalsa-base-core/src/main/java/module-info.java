@@ -10,8 +10,8 @@ module jdplus.experimentalsa.base.core {
     requires jdplus.toolkit.base.core;
     requires jdplus.sa.base.api;
 
-    exports jdplus.dfa;
-    exports jdplus.filters;
-    exports jdplus.rkhs;
-    exports jdplus.x11plus;
+    exports jdplus.experimentalsa.base.core.dfa;
+    exports jdplus.experimentalsa.base.core.filters;
+    exports jdplus.experimentalsa.base.core.rkhs;
+    exports jdplus.experimentalsa.base.core.x11plus;
 }

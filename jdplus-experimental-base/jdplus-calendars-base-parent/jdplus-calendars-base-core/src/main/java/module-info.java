@@ -1,3 +1,9 @@
+import jdplus.calendars.base.core.ChineseMovingHolidays;
+import jdplus.calendars.base.core.GregorianMovingHolidays;
+import jdplus.calendars.base.core.IslamicMovingHolidays;
+import jdplus.calendars.base.core.JulianMovingHolidays;
+import jdplus.toolkit.base.core.modelling.regression.MovingHolidayProvider;
+
 module jdplus.calendars.base.core {
 
     requires static lombok;
@@ -8,12 +14,12 @@ module jdplus.calendars.base.core {
     requires transitive jdplus.calendars.base.api;
     requires jdplus.toolkit.base.core;
 
-    exports jdplus.specialcalendar;
-    exports jdplus.specialcalendar.internal;
+    exports jdplus.calendars.base.core;
+    exports jdplus.calendars.base.core.internal;
 
-    provides jdplus.modelling.regression.MovingHolidayProvider with
-            jdplus.specialcalendar.JulianMovingHolidays.EasterProvider,
-            jdplus.specialcalendar.IslamicMovingHolidays.RasElAmProvider,
-            jdplus.specialcalendar.ChineseMovingHolidays.NewYear,
-            jdplus.specialcalendar.GregorianMovingHolidays.EasterProvider;
+    provides MovingHolidayProvider with
+            JulianMovingHolidays.EasterProvider,
+            IslamicMovingHolidays.RasElAmProvider,
+            ChineseMovingHolidays.NewYear,
+            GregorianMovingHolidays.EasterProvider;
 }

@@ -9,5 +9,5 @@ module jdplus.businesscycle.base.r {
     requires jdplus.toolkit.base.api;
     requires jdplus.businesscycle.base.core;
 
-    exports demetra.businesscycle.r;
+    exports jdplus.businesscycle.base.r;
 }

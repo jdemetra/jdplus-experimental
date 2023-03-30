@@ -8,5 +8,5 @@ module jdplus.sigex.base.core {
     requires transitive jdplus.experimentalsa.base.api;
     requires jdplus.toolkit.base.core;
 
-    exports demetra.sigex;
+    exports jdplus.sigex.base.core;
 }

@@ -10,5 +10,5 @@ module jdplus.calendars.base.r {
     requires jdplus.toolkit.base.core;
     requires jdplus.calendars.base.core;
 
-    exports demetra.specialcalendar.r;
+    exports jdplus.calendars.base.r;
 }
