@@ -7,7 +7,7 @@ package jdplus.experimentalsa.base.core.filters;
 
 import jdplus.toolkit.base.api.data.DoubleSeq;
 import jdplus.toolkit.base.api.math.Complex;
-import internal.toolkit.base.core.math.functions.gsl.integration.QAGS;
+//import internal.toolkit.base.core.math.functions.gsl.integration.QAGS;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.DoubleUnaryOperator;
@@ -18,6 +18,7 @@ import jdplus.toolkit.base.core.math.functions.IFunctionDerivatives;
 import jdplus.toolkit.base.core.math.functions.IFunctionPoint;
 import jdplus.toolkit.base.core.math.functions.IParametersDomain;
 import jdplus.toolkit.base.core.math.functions.NumericalDerivatives;
+import jdplus.toolkit.base.core.math.functions.NumericalIntegration;
 import jdplus.toolkit.base.core.math.functions.ParamValidation;
 import jdplus.toolkit.base.core.math.functions.bfgs.Bfgs;
 import jdplus.toolkit.base.core.math.linearfilters.FiniteFilter;
@@ -431,11 +432,7 @@ public class FSTFilter {
                     Complex fr = F.frequencyResponse(x);
                     return fr.getIm() * fr.getIm() / (fr.abs() + fr.getRe());
                 };
-                QAGS qags = QAGS.builder()
-                        .absoluteTolerance(1e-15)
-                        .build();
-                qags.integrate(fn, core.T.w0, core.T.w1);
-                t = qags.getResult();
+                t = NumericalIntegration.integrate(fn, core.T.w0, core.T.w1);
                 z += wt * t;
                 return z;
             }
