@@ -28,6 +28,7 @@ import jdplus.toolkit.base.core.math.linearfilters.SymmetricFilter;
 import jdplus.experimentalsa.base.core.filters.ISymmetricFiltering;
 import jdplus.experimentalsa.base.core.filters.KernelOption;
 
+import java.util.Locale;
 import java.util.function.DoubleUnaryOperator;
 
 import jdplus.experimentalsa.base.core.filters.AsymmetricCriterion;
@@ -166,7 +167,7 @@ public class RKHSFilters {
         }
     }
     private static String formattingKernel(String kernel) {
-        switch (kernel.toLowerCase()) {
+        switch (kernel.toLowerCase(Locale.ROOT)) {
             case "biweight":
                 return "BiWeight";
             case "triweight":
