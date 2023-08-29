@@ -10,5 +10,5 @@ module jdplus.experimentalsa.base.r {
     requires jdplus.toolkit.base.core;
     requires jdplus.sa.base.api;
 
-    exports jdplus.experimentalsa.base.r;
+//    exports jdplus.experimentalsa.base.r;
 }
