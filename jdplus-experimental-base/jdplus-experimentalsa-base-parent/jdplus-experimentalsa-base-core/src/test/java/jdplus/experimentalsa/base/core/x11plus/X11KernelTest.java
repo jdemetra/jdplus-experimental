@@ -5,6 +5,7 @@
  */
 package jdplus.experimentalsa.base.core.x11plus;
 
+import jdplus.toolkit.base.api.math.linearfilters.AsymmetricFilterOption;
 import tck.demetra.data.Data;
 import tck.demetra.data.WeeklyData;
 import jdplus.sa.base.api.DecompositionMode;
@@ -172,7 +173,7 @@ public class X11KernelTest {
         rspec.setAsymmetricBandWith(AsymmetricCriterion.FrequencyResponse);
         LocalPolynomialFilterSpec fspec = new LocalPolynomialFilterSpec();
         fspec.setFilterLength(6);
-//        fspec.setAsymmetricFilters(AsymmetricFiltersFactory.Option.MMSRE);
+//        fspec.setAsymmetricFilters(AsymmetricFilterOption.MMSRE);
 //        fspec.setAsymmetricPolynomialDegree(0);
 //        fspec.setLinearModelCoefficients(null);
 //        fspec.setTimelinessWeight(100);
@@ -348,7 +349,7 @@ public class X11KernelTest {
     public static IFiltering lp_c0(int h) {
         LocalPolynomialFilterSpec fspec = new LocalPolynomialFilterSpec();
         fspec.setFilterLength(h);
-        fspec.setAsymmetricFilters(AsymmetricFiltersFactory.Option.MMSRE);
+        fspec.setAsymmetricFilters(AsymmetricFilterOption.MMSRE);
         fspec.setLinearModelCoefficients(new double[0]);
         return LocalPolynomialFilterFactory.of(fspec);
     }
@@ -356,7 +357,7 @@ public class X11KernelTest {
     public static IFiltering lp_c1(int h, int tw) {
         LocalPolynomialFilterSpec fspec = new LocalPolynomialFilterSpec();
         fspec.setFilterLength(h);
-        fspec.setAsymmetricFilters(AsymmetricFiltersFactory.Option.MMSRE);
+        fspec.setAsymmetricFilters(AsymmetricFilterOption.MMSRE);
         fspec.setLinearModelCoefficients(new double[0]);
         fspec.setTimelinessWeight(tw);
         return LocalPolynomialFilterFactory.of(fspec);
@@ -365,7 +366,7 @@ public class X11KernelTest {
     public static IFiltering lp_quad(int h, double c, double tw) {
         LocalPolynomialFilterSpec fspec = new LocalPolynomialFilterSpec();
         fspec.setFilterLength(H);
-        fspec.setAsymmetricFilters(AsymmetricFiltersFactory.Option.MMSRE);
+        fspec.setAsymmetricFilters(AsymmetricFilterOption.MMSRE);
         fspec.setAsymmetricPolynomialDegree(1);
         fspec.setLinearModelCoefficients(new double[]{c});
         fspec.setTimelinessWeight(tw);
@@ -375,21 +376,21 @@ public class X11KernelTest {
     public static IFiltering musgrave(int h) {
         LocalPolynomialFilterSpec fspec = new LocalPolynomialFilterSpec();
         fspec.setFilterLength(h);
-        fspec.setAsymmetricFilters(AsymmetricFiltersFactory.Option.MMSRE);
+        fspec.setAsymmetricFilters(AsymmetricFilterOption.MMSRE);
         return LocalPolynomialFilterFactory.of(fspec);
     }
 
     public static IFiltering daf(int h) {
         LocalPolynomialFilterSpec fspec = new LocalPolynomialFilterSpec();
         fspec.setFilterLength(h);
-        fspec.setAsymmetricFilters(AsymmetricFiltersFactory.Option.Direct);
+        fspec.setAsymmetricFilters(AsymmetricFilterOption.Direct);
         return LocalPolynomialFilterFactory.of(fspec);
     }
 
     public static IFiltering cut(int h) {
         LocalPolynomialFilterSpec fspec = new LocalPolynomialFilterSpec();
         fspec.setFilterLength(h);
-        fspec.setAsymmetricFilters(AsymmetricFiltersFactory.Option.CutAndNormalize);
+        fspec.setAsymmetricFilters(AsymmetricFilterOption.CutAndNormalize);
         return LocalPolynomialFilterFactory.of(fspec);
     }
 
