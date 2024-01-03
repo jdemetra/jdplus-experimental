@@ -9,5 +9,4 @@ module jdplus.toolkitx.base.r {
     requires jdplus.toolkit.base.core;
 
     exports jdplus.toolkitx.base.r;
-
 }
