@@ -18,19 +18,27 @@ package jdplus.calendars.base.r;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import jdplus.calendars.base.core.ChineseMovingHolidays;
 
 /**
  *
  * @author palatej
  */
 @lombok.experimental.UtilityClass
-public class Utility {
+public class ChineseCalendar {
     
-    String[] convert(LocalDate[] holidays) {
-        String[] all = new String[holidays.length];
-        for (int i = 0; i < all.length; ++i) {
-            all[i] = holidays[i].format(DateTimeFormatter.ISO_DATE);
-        }
-        return all;
+    public String[] chineseNewYear(String start, String end) {
+        LocalDate pstart = LocalDate.parse(start, DateTimeFormatter.ISO_DATE);
+        LocalDate pend = LocalDate.parse(start, DateTimeFormatter.ISO_DATE);
+
+        return Utility.convert(ChineseMovingHolidays.newYear(pstart, pend));
     }
+    
+    public String[] qingMing(String start, String end) {
+        LocalDate pstart = LocalDate.parse(start, DateTimeFormatter.ISO_DATE);
+        LocalDate pend = LocalDate.parse(start, DateTimeFormatter.ISO_DATE);
+
+        return Utility.convert(ChineseMovingHolidays.qingMing(pstart, pend));
+    }
+    
 }
