@@ -120,7 +120,7 @@ public class Islamic implements Date {
     // TYPE gregorian-year -> list-of-fixed-dates
     // List of fixed dates of Ras-El-Am (New Year) occurring in
     // Gregorian year.
-    public static long[] Achoura(long gYear) {
+    public static long[] achoura(long gYear) {
         return inGregorian(1, 10, gYear);
     }
 
@@ -128,7 +128,7 @@ public class Islamic implements Date {
     // TYPE gregorian-year -> list-of-fixed-dates
     // List of fixed dates of Ras-El-Am (New Year) occurring in
     // Gregorian year.
-    public static long[] MagaldeTouba(long gYear) {
+    public static long[] magaldeTouba(long gYear) {
         return inGregorian(2, 18, gYear);
     }
 
