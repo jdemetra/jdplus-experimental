@@ -5,7 +5,7 @@
  */
 package jdplus.experimentalsa.base.core.filters;
 
-import jdplus.toolkit.base.core.math.linearfilters.AsymmetricFiltersFactory;
+import jdplus.toolkit.base.api.math.linearfilters.AsymmetricFilterOption;
 
 /**
  *
@@ -17,7 +17,7 @@ public class LocalPolynomialFilterSpec {
     private int filterLength=6;
     private KernelOption kernel=KernelOption.Henderson;
     private int polynomialDegree=2;
-    private AsymmetricFiltersFactory.Option asymmetricFilters=AsymmetricFiltersFactory.Option.MMSRE;
+    private AsymmetricFilterOption asymmetricFilters=AsymmetricFilterOption.MMSRE;
     private int asymmetricPolynomialDegree=0;
     private double[] linearModelCoefficients=new double[]{2/(Math.sqrt(Math.PI)*3.5)};
     private double timelinessWeight;
