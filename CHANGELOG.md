@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.2] - 2024-04-15
+
 ### Fixed
 
 - ![OTHER] Fixed API changes
@@ -25,7 +27,8 @@ See v1.0.0 for complete changelog.
 This is the **initial release** of experimental extensions for JDemetra+ v3.  
 [JDemetra+ v3.0.2 or later](https://github.com/jdemetra/jdplus-main) version is required to run it.
 
-[Unreleased]: https://github.com/jdemetra/jdplus-experimental/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/jdemetra/jdplus-experimental/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/jdemetra/jdplus-experimental/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/jdemetra/jdplus-experimental/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/jdemetra/jdplus-experimental/releases/tag/v1.0.0
 
