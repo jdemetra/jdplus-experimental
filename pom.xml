@@ -6,7 +6,7 @@
 
     <groupId>eu.europa.ec.joinup.sat</groupId>
     <artifactId>jdplus-experimental</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
@@ -39,7 +39,7 @@
     <properties>
         <!-- Java 17 config -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.outputTimestamp>2024-04-15T11:11:29Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2024-04-15T11:11:36Z</project.build.outputTimestamp>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.release>17</maven.compiler.release>
