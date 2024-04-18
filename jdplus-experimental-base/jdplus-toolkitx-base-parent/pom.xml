@@ -5,11 +5,11 @@
 
     <parent>
         <groupId>eu.europa.ec.joinup.sat</groupId>
-        <artifactId>jdplus-experimental</artifactId>
+        <artifactId>jdplus-experimental-base</artifactId>
         <version>1.0.3-SNAPSHOT</version>
     </parent>
 
-    <artifactId>jdplus-experimental-base</artifactId>
+    <artifactId>jdplus-toolkitx-base-parent</artifactId>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
@@ -17,9 +17,9 @@
     <url>${project.parent.url}</url>
 
     <modules>
-        <module>jdplus-businesscycle-base-parent</module>
-        <module>jdplus-calendars-base-parent</module>
-        <module>jdplus-experimentalsa-base-parent</module>
-        <module>jdplus-toolkitx-base-parent</module>
+        <module>jdplus-toolkitx-base-api</module>
+        <module>jdplus-toolkitx-base-core</module>
+        <module>jdplus-toolkitx-base-r</module>
+        <module>jdplus-toolkitx-base-io</module>
     </modules>
 </project>
