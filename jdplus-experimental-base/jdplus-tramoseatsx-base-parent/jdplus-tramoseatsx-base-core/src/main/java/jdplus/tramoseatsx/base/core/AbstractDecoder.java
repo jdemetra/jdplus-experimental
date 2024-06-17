@@ -743,50 +743,54 @@ public abstract class AbstractDecoder implements Decoder {
 
     protected abstract String nextRegs(BufferedReader reader);
 
-    protected abstract int readRegs(BufferedReader reader, RegressionSpec regspec);
+    protected abstract int readRegs(BufferedReader reader, RegressionSpec.Builder regspec);
 
     protected abstract void readSpecificInputSection(TramoSeatsSpec spec);
 
     protected TramoSeatsSpec readInputSection(BufferedReader reader, TramoSeatsSpec spec) {
         String input = nextInput(reader);
         if (input == null || !read(input)) {
-            return spec;
+            return null;
         }
-        spec=rsadecoder.process(elements, spec);
-        
-        TramoSpec tspec=spec.getTramo();
-        for (TramoSpecDecoder decoder: tdecoders){
-            tspec=decoder.process(elements, tspec);
+        spec = rsadecoder.process(elements, spec);
+
+        TramoSpec tspec = spec.getTramo();
+        for (TramoSpecDecoder decoder : tdecoders) {
+            tspec = decoder.process(elements, tspec);
         }
-        DecompositionSpec sspec=sdecoder.process(elements, spec.getSeats());
-        spec=spec.toBuilder()
+        DecompositionSpec sspec = sdecoder.process(elements, spec.getSeats());
+        spec = spec.toBuilder()
                 .tramo(tspec)
                 .seats(sspec)
                 .build();
-        
+
         readSpecificInputSection(spec);
 
         Number nregs = takeInt(Item.IREG, elements);
         int iregs = nregs == null ? 0 : nregs.intValue();
 
-        unused.clear();
-        unused.putAll(elements);
-        String regs;
-        while (iregs > 0) {
-            regs = nextRegs(reader);
-            if (regs == null) {
-                break;
-            }
-            if (!read(regs)) {
-                return null;
-            }
+        if (iregs > 0) {
+            unused.clear();
+            unused.putAll(elements);
+            String regs;
+            RegressionSpec.Builder rbuilder = spec.getTramo().getRegression().toBuilder();
+            while (iregs > 0) {
+                regs = nextRegs(reader);
+                if (regs == null) {
+                    break;
+                }
+                if (!read(regs)) {
+                    return null;
+                }
 
-            int nser = readRegs(reader, spec.getTramo().getRegression());
-            if (nser == 0) {
-                return null;
-            } else {
-                iregs -= nser;
+                int cur = readRegs(reader, rbuilder);
+                if (cur == 0) {
+                    return null;
+                } else {
+                    iregs -= cur;
+                }
             }
+            
         }
 
         return spec;
@@ -806,7 +810,7 @@ public abstract class AbstractDecoder implements Decoder {
             return null;
         }
         update(doc.series);
-        doc.spec=readInputSection(reader,TramoSeatsSpec.DEFAULT );
+        doc.spec = readInputSection(reader, TramoSeatsSpec.DEFAULT);
 
         return doc;
 
@@ -815,7 +819,7 @@ public abstract class AbstractDecoder implements Decoder {
     @Override
     public TramoSeatsSpec decodeSpec(BufferedReader reader) {
         clear();
-        TramoSeatsSpec spec =TramoSeatsSpec.DEFAULT;
+        TramoSeatsSpec spec = TramoSeatsSpec.DEFAULT;
         return readInputSection(reader, spec);
     }
 
@@ -832,14 +836,13 @@ public abstract class AbstractDecoder implements Decoder {
             String token = tokens.nextToken();
             String[] items = token.split("=");
             switch (items.length) {
-                case 2:
+                case 2 ->
                     elements.put(normalize(items[0]), items[1]);
-                    break;
-                case 1:
+                case 1 ->
                     elements.put(normalize(items[0]), null);
-                    break;
-                default:
+                default -> {
                     return false;
+                }
             }
         }
         return true;

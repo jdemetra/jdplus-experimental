@@ -17,6 +17,7 @@ package jdplus.tramoseatsx.base.core;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 import jdplus.toolkit.base.api.arima.SarimaSpec;
 import jdplus.toolkit.base.api.data.DoubleSeq;
@@ -29,6 +30,7 @@ import jdplus.toolkit.base.api.timeseries.regression.IOutlier;
 import jdplus.toolkit.base.api.timeseries.regression.InterventionVariable;
 import jdplus.toolkit.base.api.timeseries.regression.Ramp;
 import jdplus.toolkit.base.api.timeseries.regression.TsContextVariable;
+import jdplus.toolkit.base.api.timeseries.regression.Variable;
 import jdplus.tramoseats.base.api.seats.DecompositionSpec;
 import jdplus.tramoseats.base.api.seats.SeatsSpec;
 import jdplus.tramoseats.base.api.tramo.AutoModelSpec;
@@ -61,13 +63,13 @@ public abstract class AbstractEncoder implements Encoder {
 
     protected abstract void writeCalendarRegs(TradingDaysSpec spec);
 
-    protected abstract void writeOutlierRegs(IOutlier[] spec);
+    protected abstract void writeOutlierRegs(List<Variable<IOutlier>> spec);
 
-    protected abstract void writeRampRegs(Ramp[] spec);
+    protected abstract void writeRampRegs(List<Variable<Ramp>> spec);
 
-    protected abstract void writeInterventionRegs(InterventionVariable[] spec);
+    protected abstract void writeInterventionRegs(List<Variable<InterventionVariable>> spec);
 
-    protected abstract void writeUserRegs(TsContextVariable[] spec);
+    protected abstract void writeUserRegs(List<Variable<TsContextVariable>> spec);
 
     protected abstract void writeEstimateSpan(TransformSpec spec);
 
@@ -181,12 +183,12 @@ public abstract class AbstractEncoder implements Encoder {
 
     protected void write(Item item, TsPeriod p) {
         addSeparator();
-        m_builder.append(item).append('=').append(p.year()).append('.').append(String.format(I2, p.annualPosition() + 1));
+        m_builder.append(item).append('=').append(p.year()).append('.').append(String.format(Locale.ROOT, I2, p.annualPosition() + 1));
     }
 
     protected void write(Item item, int idx, TsPeriod p) {
         addSeparator();
-        m_builder.append(item).append('(').append(idx).append(")=").append(p.year()).append('.').append(String.format(I2, p.annualPosition() + 1));
+        m_builder.append(item).append('(').append(idx).append(")=").append(p.year()).append('.').append(String.format(Locale.ROOT, I2, p.annualPosition() + 1));
     }
 
     protected void write(DecompositionSpec spec) {
@@ -264,10 +266,10 @@ public abstract class AbstractEncoder implements Encoder {
             return;
         }
         writeCalendarRegs(spec.getCalendar().getTradingDays());
-        writeOutlierRegs(spec.getOutliers().stream().map(v -> v.getCore()).toArray(IOutlier[]::new));
-        writeRampRegs(spec.getRamps().stream().map(v -> v.getCore()).toArray(Ramp[]::new));
-        writeInterventionRegs(spec.getInterventionVariables().stream().map(v -> v.getCore()).toArray(InterventionVariable[]::new));
-        writeUserRegs(spec.getUserDefinedVariables().stream().map(v -> v.getCore()).toArray(TsContextVariable[]::new));
+        writeOutlierRegs(spec.getOutliers());
+        writeRampRegs(spec.getRamps());
+        writeInterventionRegs(spec.getInterventionVariables());
+        writeUserRegs(spec.getUserDefinedVariables());
     }
 
     protected void write(RegressionSpec spec) {

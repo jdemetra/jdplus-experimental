@@ -21,14 +21,33 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import jdplus.sa.base.api.ComponentType;
+import jdplus.sa.base.api.SaVariable;
 import jdplus.toolkit.base.api.data.DoubleSeq;
 import jdplus.toolkit.base.api.data.Range;
+import jdplus.toolkit.base.api.timeseries.TimeSelector.SelectionType;
 import jdplus.toolkit.base.api.timeseries.TsData;
+import jdplus.toolkit.base.api.timeseries.TsDataSupplier;
 import jdplus.toolkit.base.api.timeseries.TsDomain;
 import jdplus.toolkit.base.api.timeseries.TsObs;
+import jdplus.toolkit.base.api.timeseries.TsPeriod;
+import jdplus.toolkit.base.api.timeseries.TsUnit;
+import jdplus.toolkit.base.api.timeseries.calendars.CalendarDefinition;
+import jdplus.toolkit.base.api.timeseries.calendars.DayClustering;
+import jdplus.toolkit.base.api.timeseries.calendars.LengthOfPeriodType;
+import jdplus.toolkit.base.api.timeseries.regression.HolidaysCorrectedTradingDays;
+import jdplus.toolkit.base.api.timeseries.regression.IOutlier;
+import jdplus.toolkit.base.api.timeseries.regression.ITsVariable;
 import jdplus.toolkit.base.api.timeseries.regression.InterventionVariable;
+import jdplus.toolkit.base.api.timeseries.regression.LengthOfPeriod;
 import jdplus.toolkit.base.api.timeseries.regression.ModellingContext;
 import jdplus.toolkit.base.api.timeseries.regression.Ramp;
+import jdplus.toolkit.base.api.timeseries.regression.TsContextVariable;
+import jdplus.toolkit.base.api.timeseries.regression.Variable;
+import jdplus.toolkit.base.core.data.DataBlock;
+import jdplus.toolkit.base.core.data.DataBlockIterator;
+import jdplus.toolkit.base.core.math.matrices.FastMatrix;
+import jdplus.toolkit.base.core.modelling.regression.HolidaysCorrectionFactory;
+import jdplus.toolkit.base.core.modelling.regression.Regression;
 import jdplus.tramoseats.base.api.tramo.OutlierSpec;
 import jdplus.tramoseats.base.api.tramo.TradingDaysSpec;
 import jdplus.tramoseats.base.api.tramo.TransformSpec;
@@ -139,18 +158,23 @@ public class LegacyEncoder extends AbstractEncoder {
     @Override
     protected void writeCalendarRegs(TradingDaysSpec spec) {
         if (spec.getHolidays() != null) {
-            IGregorianCalendarProvider cal = context.getGregorianCalendars().get(spec.getHolidays());
+            CalendarDefinition cal = context.getCalendars().get(spec.getHolidays());
             if (cal != null) {
                 int ntd = spec.getTradingDaysType().getVariablesCount();
-                if (spec.isLeapYear()) {
-                    ++ntd;
-                }
-                TsDomain xdom = domain.extend(0, 3 * domain.getFrequency().intValue());
-                Matrix M = new Matrix(xdom.getLength(), ntd);
-                List<DataBlock> cols = M.columnList();
-                cal.calendarData(spec.getTradingDaysType(), xdom, cols, 0);
-                if (spec.isLeapYear()) {
-                    new LeapYearVariable(LengthOfPeriodType.LeapYear).data(domain.getStart(), cols.get(ntd - 1));
+                DayClustering dc = ntd == 6 ? DayClustering.TD7 : DayClustering.TD2;
+                HolidaysCorrectedTradingDays td = HolidaysCorrectedTradingDays
+                        .builder()
+                        .clustering(dc)
+                        .contrast(true)
+                        .build();
+                boolean lp = spec.getLengthOfPeriodType() != LengthOfPeriodType.None;
+                TsDomain xdom = domain.extend(0, 3 * domain.getAnnualFrequency());
+                LengthOfPeriod vlp = lp ? new LengthOfPeriod(spec.getLengthOfPeriodType()) : null;
+                FastMatrix M;
+                if (lp) {
+                    M = Regression.matrix(xdom, td, vlp);
+                } else {
+                    M = Regression.matrix(xdom, td);
                 }
                 for (int i = 0; i < M.getColumnsCount(); ++i) {
                     openRegSection();
@@ -169,43 +193,42 @@ public class LegacyEncoder extends AbstractEncoder {
             TsDomain xdom = domain.extend(0, 3 * domain.getAnnualFrequency());
 
             for (int i = 0; i < vars.length; ++i) {
-                ITsVariable var = context.getTsVariable(vars[i]);
-                if (var.getDim() == 1) {
-                    DataBlock data = new DataBlock(xdom.getLength());
-                    var.data(xdom, Collections.singletonList(data));
-                    openRegSection();
-                    write(Item.IUSER, 1);
-                    write(Item.ILONG, xdom.getLength());
-                    write(Item.NSER, 1);
-                    write(Item.REGEFF, 2);
-                    closeSection();
-                    openFreeSection();
-                    write(data);
-                    closeSection();
-                }
+                TsDataSupplier var = context.getTsVariable(vars[i]);
+                TsData s = var.get();
+                s = TsData.fitToDomain(s, xdom);
+                openRegSection();
+                write(Item.IUSER, 1);
+                write(Item.ILONG, xdom.getLength());
+                write(Item.NSER, 1);
+                write(Item.REGEFF, 2);
+                closeSection();
+                openFreeSection();
+                write(s.getValues());
+                closeSection();
             }
         }
     }
 
     @Override
-    protected void writeInterventionRegs(InterventionVariable[] spec) {
-        if (spec == null) {
+    protected void writeInterventionRegs(List<Variable<InterventionVariable>> spec) {
+        if (spec.isEmpty()) {
             return;
         }
-        for (int i = 0; i < spec.length; ++i) {
+        for (Variable<InterventionVariable> cur : spec) {
             openRegSection();
-            List<Range<LocalDateTime>> sequences = spec[i].getSequences();
+            InterventionVariable core = cur.getCore();
+            List<Range<LocalDateTime>> sequences = core.getSequences();
             int nseq = sequences.size();
             write(Item.ISEQ, nseq);
-            double d = spec[i].getDelta();
+            double d = core.getDelta();
             if (d != 0) {
                 write(Item.DELTA, d);
             }
-            double ds = spec[i].getDeltaSeasonal();
+            double ds = core.getDeltaSeasonal();
             if (ds != 0) {
                 write(Item.DELTAS, ds);
             }
-            if (spec[i].getDelta() == 1 && spec[i].getDeltaSeasonal() == 1) {
+            if (core.getDelta() == 1 && core.getDeltaSeasonal() == 1) {
                 write(Item.ID1DS, 1);
             }
             closeSection();
@@ -220,52 +243,53 @@ public class LegacyEncoder extends AbstractEncoder {
     }
 
     @Override
-    protected void writeUserRegs(TsVariableDescriptor[] spec) {
-        if (spec == null) {
+    protected void writeUserRegs(List<Variable<TsContextVariable>> spec) {
+        if (spec.isEmpty()) {
             return;
         }
-        TsDomain xdom = domain.extend(0, 3 * domain.getFrequency().intValue());
-        for (int i = 0; i < spec.length; ++i) {
-            ITsVariable var = spec[i].toTsVariable(context);
-            Matrix M = new Matrix(xdom.getLength(), var.getDim());
-            List<DataBlock> cols = M.columnList();
-            var.data(xdom, cols);
+        TsDomain xdom = domain.extend(0, 3 * domain.getAnnualFrequency());
+        for (Variable<TsContextVariable> cur: spec) {
+            ITsVariable var = cur.getCore().instantiateFrom(context, null);
+            FastMatrix M = Regression.matrix(xdom, var);
+            DataBlockIterator cols = M.columnsIterator();
             for (int j = 0; j < M.getColumnsCount(); ++j) {
                 openRegSection();
                 write(Item.IUSER, 1);
                 write(Item.NSER, 1);
                 write(Item.ILONG, xdom.getLength());
-                write(Item.REGEFF, convert(spec[i].getEffect()));
+                write(Item.REGEFF, convert(SaVariable.regressionEffect(cur)));
                 closeSection();
                 openFreeSection();
-                write(M.column(i));
+                write(cols.next());
                 closeSection();
             }
         }
     }
 
- 
     @Override
-    protected void writeOutlierRegs(OutlierDefinition[] spec) {
-        if (spec == null || spec.length == 0 || domain == null) {
+    protected void writeOutlierRegs(List<Variable<IOutlier>> spec) {
+        if (spec.isEmpty() || domain == null) {
             return;
         }
         openRegSection();
         write(Item.IUSER, 2);
-        write(Item.NSER, spec.length);
+        write(Item.NSER, spec.size());
         closeSection();
         openFreeSection();
-        for (int i = 0; i < spec.length; ++i) {
-            TsPeriod p = new TsPeriod(domain.getFrequency());
-            p.set(spec[i].getPosition());
-            m_builder.append(sep).append(p.minus(domain.getStart()) + 1).
-                    append(sep).append(spec[i].getCode());
+        int freq = domain.getAnnualFrequency();
+        TsUnit unit = TsUnit.ofAnnualFrequency(freq);
+        TsPeriod start = domain.getStartPeriod();
+        for (Variable<IOutlier> cur : spec) {
+            LocalDateTime pos = cur.getCore().getPosition();
+            TsPeriod p = TsPeriod.of(unit, pos);
+            m_builder.append(sep).append(start.until(p) + 1).
+                    append(sep).append(cur.getCore().getCode());
         }
         closeSection();
     }
 
     @Override
-    protected void writeRampRegs(Ramp[] spec) {
+    protected void writeRampRegs(List<Variable<Ramp>> spec) {
         //TODO
     }
 
@@ -276,13 +300,13 @@ public class LegacyEncoder extends AbstractEncoder {
 
     @Override
     protected void writeOutliersSpan(OutlierSpec spec) {
-        if (domain != null && spec.getSpan().getType() != PeriodSelectorType.All) {
+        if (domain != null && spec.getSpan().getType() != SelectionType.All) {
             TsDomain ndom = domain.select(spec.getSpan());
             if (ndom.getLength() == 0) {
                 write(Item.INT1, domain.getLength() + 1);
             } else {
-                write(Item.INT1, 1 + (ndom.getStart().minus(domain.getStart())));
-                write(Item.INT1, ndom.getEnd().minus(domain.getStart()));
+                write(Item.INT1, 1 + domain.getStartPeriod().until(ndom.getStartPeriod()));
+                write(Item.INT1, domain.getStartPeriod().until(ndom.getEndPeriod()));
             }
         }
     }
@@ -297,9 +321,18 @@ public class LegacyEncoder extends AbstractEncoder {
                 writer.append(ts);
                 writer.append(spec);
             } catch (IOException ex) {
-                
+
             }
         }
+    }
+
+    static int convert(ComponentType cmp) {
+        return switch (cmp) {
+            case Trend -> 1;
+            case Seasonal -> 2;
+            case Irregular -> 3;
+            default -> 0;
+        };
     }
 
 }
