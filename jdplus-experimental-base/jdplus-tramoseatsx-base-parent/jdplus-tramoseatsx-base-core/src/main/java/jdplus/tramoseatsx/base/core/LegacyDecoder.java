@@ -473,7 +473,8 @@ public class LegacyDecoder extends AbstractDecoder {
         InterventionVariable.Builder var = InterventionVariable.builder();
         int[] params = nextIntParameters(reader);
         for (int i = 0; i < params.length; i += 2) {
-            LocalDateTime start = domain_.get(params[i] - 1).start(), end = domain_.get(params[i + 1] - 1).start();
+            int i0=params[i] - 1, n=params[i+1];
+            LocalDateTime start = domain_.get(i0).start(), end = domain_.get(i0+n-1).start();
             var.sequence(Range.of(start, end));
         }
         if (delta != null) {

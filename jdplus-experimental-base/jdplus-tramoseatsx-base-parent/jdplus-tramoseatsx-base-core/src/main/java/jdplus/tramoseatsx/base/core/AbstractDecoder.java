@@ -399,11 +399,6 @@ public abstract class AbstractDecoder implements Decoder {
                 }
                 processed = true;
             }
-//            n = takeInt(Item.IMEAN, dictionary);
-//            if (n != null) {
-//                arima.setMean(0 != n.intValue());
-//                processed = true;
-//            }
 
             if (processed) {
                 return spec.toBuilder()
@@ -443,10 +438,11 @@ public abstract class AbstractDecoder implements Decoder {
                 if (v != null) {
                     ParameterType type = (s != null && s.intValue() == 1) ? ParameterType.Fixed : deftype;
                     c = Parameter.of(v.doubleValue(), type);
-                }
+                }else
+                    c=Parameter.undefined();
                 p[i] = c;
             }
-            return Parameter.isDefault(p) ? null : p;
+            return p;
         }
 
     }
@@ -504,6 +500,19 @@ public abstract class AbstractDecoder implements Decoder {
                         .build();
             } else {
                 return spec;
+            }
+        }
+    }
+
+    protected static class MeanDecoder implements TramoSpecDecoder {
+
+        @Override
+        public TramoSpec process(Map<String, String> dictionary, TramoSpec spec) {
+            Number n = takeInt(Item.IMEAN, dictionary);
+            if (n != null && n.intValue() == 0) {
+                return spec.toBuilder().regression(RegressionSpec.DEFAULT_UNUSED).build();
+            } else {
+                return spec.toBuilder().regression(RegressionSpec.DEFAULT_CONST).build();
             }
         }
     }
@@ -726,6 +735,7 @@ public abstract class AbstractDecoder implements Decoder {
 
     protected AbstractDecoder() {
         rsadecoder = new RsaDecoder();
+        tdecoders.add(new MeanDecoder());
         tdecoders.add(new TransformDecoder());
         tdecoders.add(new EstimateDecoder());
         tdecoders.add(new ArimaDecoder());
@@ -790,7 +800,13 @@ public abstract class AbstractDecoder implements Decoder {
                     iregs -= cur;
                 }
             }
-            
+        spec = spec.toBuilder()
+                .tramo(tspec
+                        .toBuilder()
+                        .regression(rbuilder.build())
+                        .build())
+                .seats(sspec)
+                .build();
         }
 
         return spec;
