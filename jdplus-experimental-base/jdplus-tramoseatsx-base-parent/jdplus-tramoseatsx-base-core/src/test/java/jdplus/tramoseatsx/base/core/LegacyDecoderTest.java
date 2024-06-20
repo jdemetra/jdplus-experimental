@@ -38,11 +38,7 @@ public class LegacyDecoderTest {
     }
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-//        BufferedReader reader
-//                = new BufferedReader(new FileReader("C:\\SA\\TramoSeats\\TRAMO\\EXAMPLES\\EXAMPLE.7", Charset.defaultCharset()));
-//        ModellingContext cxt=new ModellingContext();
-//        LegacyDecoder decoder=new LegacyDecoder(cxt);
-//        Decoder.Document doc = decoder.decodeDocument(reader);
+//        Decoder.Document doc = Utility.readDocument("EXAMPLE.7", "C:\\SA\\TramoSeats\\TRAMO\\EXAMPLES\\");
 //        System.out.println(doc.series);
 //        System.out.println(doc.spec);
 

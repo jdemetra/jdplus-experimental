@@ -73,13 +73,14 @@ public class LegacyDecoder extends AbstractDecoder {
     private static final String EXTERNAL = "_ts_external_";
     private static int idx = 0;
     private static final HashMap<String, String> extFiles = new HashMap<>();
-    private File path_;
-    private TsDomain domain_;
+    private final File path;
+    private TsDomain domain;
     private final ModellingContext context;
     private int iter;
 
-    public LegacyDecoder(ModellingContext context) {
-        domain_ = null;
+    public LegacyDecoder(ModellingContext context, File path) {
+        this.path=path;
+        domain = null;
         tdecoders.add(new OutliersDecoder());
         if (context == null) {
             this.context = ModellingContext.getActiveContext();
@@ -87,25 +88,27 @@ public class LegacyDecoder extends AbstractDecoder {
             this.context = context;
         }
     }
-
-    public void setFolder(File path) {
-        path_ = path;
+    
+    @Override
+    public ModellingContext getContext(){
+        return context;
     }
 
     public List<Document> decodeMultiDocument(BufferedReader reader) {
         unused.clear();
         elements.clear();
         ArrayList<Document> docs = new ArrayList<>();
-        Document doc0 = new Document();
+        Document doc0;
         try {
-            if (!readData(reader, doc0)) {
+            doc0=readData(reader);
+            if (doc0==null) {
                 return null;
             }
         } catch (IOException ex) {
             return null;
         }
         update(doc0.series);
-        doc0.spec = readInputSection(reader, TramoSeatsSpec.DEFAULT);
+        doc0.setSpec(readInputSection(reader, TramoSeatsSpec.DEFAULT));
         docs.add(doc0);
         if (iter != 0) {
             switch (iter) {
@@ -116,11 +119,8 @@ public class LegacyDecoder extends AbstractDecoder {
                         if (spec == null) {
                             break;
                         }
-                        Document doc = new Document();
-                        doc.name = doc0.name;
-                        doc.series = doc0.series;
-                        update(doc0.series);
-                        doc.spec = spec;
+                        Document doc = new Document(doc0.getName(), doc0.getSeries(), context);
+                        doc.setSpec(spec); 
                         docs.add(doc);
                     }
                 }
@@ -133,25 +133,24 @@ public class LegacyDecoder extends AbstractDecoder {
                     }
                     for (NamedObject<TsData> cur : items) {
 
-                        Document doc = new Document();
-                        doc.series = cur.getObject();
-                        doc.name = cur.getName();
-                        doc.spec = doc0.spec;
+                         Document doc = new Document(cur.getName(), cur.getObject(), context);
+                        doc.setSpec(doc0.getSpec()); 
                         docs.add(doc);
                     }
                 }
                 case 3 -> {
                     while (true) {
-                        Document doc = new Document();
+                        Document doc;
                         try {
-                            if (!readData(reader, doc)) {
+                            doc=readData(reader);
+                            if (doc == null) {
                                 break;
                             }
                         } catch (IOException ex) {
                             return null;
                         }
                         update(doc.series);
-                        doc.spec = readInputSection(reader, TramoSeatsSpec.DEFAULT);
+                        doc.setSpec(readInputSection(reader, TramoSeatsSpec.DEFAULT));
                         docs.add(doc);
                     }
                 }
@@ -173,12 +172,12 @@ public class LegacyDecoder extends AbstractDecoder {
 
     @Override
     protected void update(TsData s) {
-        domain_ = s.getDomain();
+        domain = s.getDomain();
     }
 
     protected void readData(BufferedReader reader, List<NamedObject<TsData>> data) throws IOException {
         do {
-            NamedObject<TsData> s = readData(reader);
+            NamedObject<TsData> s = readSeries(reader);
             if (s == null) {
                 break;
             } else {
@@ -232,7 +231,7 @@ public class LegacyDecoder extends AbstractDecoder {
                     return 0;
                 }
                 String code = details.nextToken().toUpperCase(Locale.ROOT);
-                TsPeriod p = domain_.get(pos - 1);
+                TsPeriod p = domain.get(pos - 1);
                 IOutlier o;
                 switch (code) {
                     case AdditiveOutlier.CODE ->
@@ -247,7 +246,7 @@ public class LegacyDecoder extends AbstractDecoder {
                         return 0;
                     }
                 }
-                regression.outlier(Variable.variable(o.description(domain_), o));
+                regression.outlier(Variable.variable(o.description(domain), o));
             }
             return nser.intValue();
         } else {
@@ -335,7 +334,7 @@ public class LegacyDecoder extends AbstractDecoder {
         }
         int nvars = nser.intValue();
         String input = reader.readLine();
-        String fullName = path_ == null ? input : Paths.concatenate(path_.getAbsolutePath(), input);
+        String fullName = path == null ? input : Paths.concatenate(path.getAbsolutePath(), input);
         String vname = nameFromFile(fullName);
         String[] names = new String[nvars];
         int ip = input.indexOf('.');
@@ -350,7 +349,7 @@ public class LegacyDecoder extends AbstractDecoder {
             if (M != null) {
                 vars = new TsDataSuppliers();
                 for (int i = 0; i < nvars; ++i) {
-                    TsDataSupplier cvar = new StaticTsDataSupplier(TsData.of(domain_.getStartPeriod(), M.column(i)));
+                    TsDataSupplier cvar = new StaticTsDataSupplier(TsData.of(domain.getStartPeriod(), M.column(i)));
                     vars.set(names[i], cvar);
                 }
                 vmgr.set(vname, vars);
@@ -410,7 +409,7 @@ public class LegacyDecoder extends AbstractDecoder {
         if (M != null) {
             for (int i = 0; i < nvars; ++i) {
                 if (!vars.contains(names[i])) {
-                    StaticTsDataSupplier cvar = new StaticTsDataSupplier(TsData.of(domain_.getStartPeriod(), M.column(i)));
+                    StaticTsDataSupplier cvar = new StaticTsDataSupplier(TsData.of(domain.getStartPeriod(), M.column(i)));
                     vars.set(names[i], cvar);
                 }
             }
@@ -474,7 +473,7 @@ public class LegacyDecoder extends AbstractDecoder {
         int[] params = nextIntParameters(reader);
         for (int i = 0; i < params.length; i += 2) {
             int i0=params[i] - 1, n=params[i+1];
-            LocalDateTime start = domain_.get(i0).start(), end = domain_.get(i0+n-1).start();
+            LocalDateTime start = domain.get(i0).start(), end = domain.get(i0+n-1).start();
             var.sequence(Range.of(start, end));
         }
         if (delta != null) {
@@ -515,7 +514,7 @@ public class LegacyDecoder extends AbstractDecoder {
 
     private Matrix readExternalMatrix(int n, int nser, String file) {
         try {
-            File f = path_ == null ? new File(file) : new File(path_, file);
+            File f = path == null ? new File(file) : new File(path, file);
             FileReader reader = new FileReader(f, Charset.defaultCharset());
             StringBuilder builder = new StringBuilder();
             char[] data = new char[1024];
@@ -657,11 +656,11 @@ public class LegacyDecoder extends AbstractDecoder {
             if (int1 == null && int2 == null) {
                 return false;
             } else {
-                if (domain_ != null) {
+                if (domain != null) {
                     int i1 = int1 == null ? 0 : int1.intValue() - 1;
-                    int i2 = int2 == null ? domain_.getLength() - 1 : int2.intValue() - 1;
-                    if (i1 < 0 || i1 >= i2 || i2 >= domain_.getLength()) {
-                        TsPeriod start = domain_.get(i1), end = domain_.get(i2);
+                    int i2 = int2 == null ? domain.getLength() - 1 : int2.intValue() - 1;
+                    if (i1 < 0 || i1 >= i2 || i2 >= domain.getLength()) {
+                        TsPeriod start = domain.get(i1), end = domain.get(i2);
                         outliers.span(TimeSelector.between(start.start(), end.start()));
                     }
                 }

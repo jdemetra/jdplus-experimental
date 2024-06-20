@@ -65,12 +65,12 @@ public abstract class AbstractDecoder implements Decoder {
         }
     }
 
-    protected boolean readData(BufferedReader br, Document doc) throws IOException {
+    protected Document readData(BufferedReader br) throws IOException {
         String currentLine = br.readLine();
         if (currentLine == null) {
-            return false;
+            return null;
         }
-        doc.name = currentLine.trim();
+        String name = currentLine.trim();
 
         /* Read second line (parameters)
          * 1) Number of lines of data
@@ -80,7 +80,7 @@ public abstract class AbstractDecoder implements Decoder {
          */
         currentLine = br.readLine();
         if (currentLine == null) {
-            return false;
+            return null;
         }
         Tokenizer tokenizer = new Tokenizer(currentLine);
         String token;
@@ -96,16 +96,16 @@ public abstract class AbstractDecoder implements Decoder {
 
         // Controlling params
         if (params.size() != 4) {
-            return false;
+            return null;
         }
         int nbrObs = params.get(0);
         int period = params.get(2);
         int freq = params.get(3);
         if (freq < 1 || freq > 12 || 12 % freq != 0) {
-            return false;
+            return null;
         }
         if (period <= 0 || period > freq) {
-            return false;
+            return null;
         }
 
         List<Number> data = new ArrayList<>();
@@ -127,11 +127,11 @@ public abstract class AbstractDecoder implements Decoder {
             adata[i] = (obs == MISSING ? Double.NaN : obs);
         }
 
-        doc.series = Utility.seriesOf(freq, params.get(1), params.get(2), adata);
-        return true;
+        TsData series = Utility.seriesOf(freq, params.get(1), params.get(2), adata);
+        return new Document(name, series, getContext());
     }
 
-    protected NamedObject<TsData> readData(BufferedReader reader) throws IOException {
+    protected NamedObject<TsData> readSeries(BufferedReader reader) throws IOException {
         String currentLine = reader.readLine();
         if (currentLine == null) {
             return null;
@@ -817,9 +817,10 @@ public abstract class AbstractDecoder implements Decoder {
     @Override
     public Document decodeDocument(BufferedReader reader) {
         clear();
-        Document doc = new Document();
+        Document doc;
         try {
-            if (!readData(reader, doc)) {
+            doc=readData(reader);
+            if (doc == null) {
                 return null;
             }
         } catch (IOException ex) {

@@ -17,6 +17,7 @@ package jdplus.tramoseatsx.base.core;
 
 import java.io.BufferedReader;
 import jdplus.toolkit.base.api.timeseries.TsData;
+import jdplus.toolkit.base.api.timeseries.regression.ModellingContext;
 import jdplus.tramoseats.base.api.tramoseats.TramoSeatsSpec;
 
 /**
@@ -25,12 +26,25 @@ import jdplus.tramoseats.base.api.tramoseats.TramoSeatsSpec;
  */
 public interface Decoder {
     
+    @lombok.Getter
     public static class Document{
-        public String name;
-        public TsData series;
-        public TramoSeatsSpec spec;
+        String name;
+        TsData series;
+        ModellingContext context;
+        
+        public Document(String name,TsData series,ModellingContext context){
+            this.name=name;
+            this.series=series;
+            this.context=context;
+        }
+        
+        @lombok.Setter
+        TramoSeatsSpec spec;
     }
     
     TramoSeatsSpec decodeSpec(BufferedReader reader);
+
     Document decodeDocument(BufferedReader reader);
+    
+    ModellingContext getContext();
 }

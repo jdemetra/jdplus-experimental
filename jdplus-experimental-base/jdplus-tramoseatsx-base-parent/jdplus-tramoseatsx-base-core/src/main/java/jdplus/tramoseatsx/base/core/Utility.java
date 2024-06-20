@@ -15,7 +15,13 @@
  */
 package jdplus.tramoseatsx.base.core;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.time.LocalDate;
+import java.util.List;
 import jdplus.sa.base.api.ComponentType;
 import static jdplus.sa.base.api.ComponentType.Irregular;
 import static jdplus.sa.base.api.ComponentType.Seasonal;
@@ -23,6 +29,7 @@ import static jdplus.sa.base.api.ComponentType.Trend;
 import jdplus.toolkit.base.api.timeseries.TsData;
 import jdplus.toolkit.base.api.timeseries.TsPeriod;
 import jdplus.toolkit.base.api.timeseries.TsUnit;
+import jdplus.toolkit.base.api.timeseries.regression.ModellingContext;
 import jdplus.tramoseats.base.api.tramo.OutlierSpec;
 
 /**
@@ -112,5 +119,22 @@ public class Utility {
                 0;
         };
     }
-
+    
+    public Decoder.Document readDocument(String file, String folder) throws IOException{
+        File f=folder == null ? new File(file) : new File(folder,file);
+         BufferedReader reader
+                = new BufferedReader(new FileReader(f, Charset.defaultCharset()));
+        ModellingContext cxt=new ModellingContext();
+        LegacyDecoder decoder=new LegacyDecoder(cxt, folder == null ? null : new File(folder));
+        return decoder.decodeDocument(reader);
+    }
+    
+    public List<Decoder.Document> readDocuments(String file, String folder) throws IOException{
+        File f=folder == null ? new File(file) : new File(folder,file);
+         BufferedReader reader
+                = new BufferedReader(new FileReader(f, Charset.defaultCharset()));
+        ModellingContext cxt=new ModellingContext();
+        LegacyDecoder decoder=new LegacyDecoder(cxt, folder == null ? null : new File(folder));
+        return decoder.decodeMultiDocument(reader);
+    }
 }
