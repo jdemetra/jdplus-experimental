@@ -52,7 +52,7 @@
         <lombok.version>1.18.34</lombok.version>
         <java-service.version>1.9.0</java-service.version>
         <java-design.version>1.5.1</java-design.version>
-        <checker-qual.version>3.46.0</checker-qual.version>
+        <checker-qual.version>3.47.0</checker-qual.version>
 
         <!-- test frameworks -->
         <junit.version>5.11.0</junit.version>
@@ -161,12 +161,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.4.0</version>
+                    <version>3.5.0</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.apache.maven.surefire</groupId>
                             <artifactId>surefire-junit-platform</artifactId>
-                            <version>3.4.0</version>
+                            <version>3.5.0</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -194,7 +194,7 @@
                 <plugin>
                     <groupId>com.github.nbbrd.heylogs</groupId>
                     <artifactId>heylogs-maven-plugin</artifactId>
-                    <version>0.8.1</version>
+                    <version>0.9.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.xolstice.maven.plugins</groupId>
@@ -214,7 +214,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.8.0</version>
+                    <version>3.10.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.simplify4u.plugins</groupId>
@@ -229,7 +229,7 @@
                 <plugin>
                     <groupId>org.jreleaser</groupId>
                     <artifactId>jreleaser-maven-plugin</artifactId>
-                    <version>1.13.1</version>
+                    <version>1.14.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -323,12 +323,12 @@
                     <dependency>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>extra-enforcer-rules</artifactId>
-                        <version>1.8.0</version>
+                        <version>1.9.0</version>
                     </dependency>
                     <dependency>
                         <groupId>org.kordamp.maven</groupId>
                         <artifactId>pomchecker-enforcer-rules</artifactId>
-                        <version>1.11.0</version>
+                        <version>1.13.0</version>
                     </dependency>
                 </dependencies>
                 <executions>
