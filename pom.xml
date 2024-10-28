@@ -52,15 +52,15 @@
         <lombok.version>1.18.34</lombok.version>
         <java-service.version>1.9.0</java-service.version>
         <java-design.version>1.5.1</java-design.version>
-        <checker-qual.version>3.48.0</checker-qual.version>
+        <checker-qual.version>3.48.1</checker-qual.version>
 
         <!-- test frameworks -->
-        <junit.version>5.11.2</junit.version>
+        <junit.version>5.11.3</junit.version>
         <assertj-core.version>3.26.3</assertj-core.version>
 
         <!-- dependencies -->
         <jd2.version>2.2.5</jd2.version>
-        <jdplus-main.version>3.2.4</jdplus-main.version>
+        <jdplus-main.version>3.3.0</jdplus-main.version>
         <protobuf.version>3.21.12</protobuf.version>
     </properties>
 
@@ -156,17 +156,17 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.20.0</version>
+                    <version>3.21.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.5.1</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.apache.maven.surefire</groupId>
                             <artifactId>surefire-junit-platform</artifactId>
-                            <version>3.5.0</version>
+                            <version>3.5.1</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -174,7 +174,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.8.0</version>
+                    <version>3.8.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -189,7 +189,7 @@
                 <plugin>
                     <groupId>de.thetaphi</groupId>
                     <artifactId>forbiddenapis</artifactId>
-                    <version>3.7</version>
+                    <version>3.8</version>
                 </plugin>
                 <plugin>
                     <groupId>com.github.nbbrd.heylogs</groupId>
@@ -328,7 +328,7 @@
                     <dependency>
                         <groupId>org.kordamp.maven</groupId>
                         <artifactId>pomchecker-enforcer-rules</artifactId>
-                        <version>1.13.0</version>
+                        <version>1.14.0</version>
                     </dependency>
                 </dependencies>
                 <executions>
