@@ -8,4 +8,7 @@ module jdplus.toolkitx.base.core {
     requires jdplus.toolkit.base.api;
     requires jdplus.toolkit.base.core;
 
+
+    exports jdplus.toolkitx.base.core.arima;
+    exports jdplus.toolkitx.base.core.tarima;
 }

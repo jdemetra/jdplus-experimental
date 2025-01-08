@@ -9,5 +9,7 @@ module jdplus.toolkitx.base.core {
     requires jdplus.toolkit.base.core;
     requires jdplus.tramoseats.base.api;
     requires jdplus.tramoseats.base.core;
+    
+    exports jdplus.tramoseatsx.base.core;
 
 }

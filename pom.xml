@@ -60,8 +60,8 @@
 
         <!-- dependencies -->
         <jd2.version>2.2.5</jd2.version>
-        <jdplus-main.version>3.3.0</jdplus-main.version>
-        <protobuf.version>3.21.12</protobuf.version>
+        <jdplus-main.version>3.3.1-SNAPSHOT</jdplus-main.version>
+        <!--protobuf.version>3.21.12</protobuf.version-->
     </properties>
 
     <modules>
