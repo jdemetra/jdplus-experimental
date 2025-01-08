@@ -36,9 +36,11 @@ public class TimeVaryingAirlineDecomposerTest {
 
     @Test
     public void testLinear() {
-        double[] s = Data.RETAIL_BOOKSTORES;
+        double[] s = Data.RETAIL_BOOKSTORES.clone();
+        for (int i=0; i<s.length; ++i)
+            s[i]=Math.log(s[i]);
         double[] th = linear(s.length, 0.3, -0.6);
-        double[] bth = linear(s.length, 0.1, -0.8);
+        double[] bth = linear(s.length, -0.1, -0.8);
         long t0 = System.currentTimeMillis();
         TimeVaryingAirlineDecomposer decomposer = new TimeVaryingAirlineDecomposer(12, th, bth);
         UcarimaModel[] ucarimaModels = decomposer.ucarimaModels();
