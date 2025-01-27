@@ -15,11 +15,10 @@
  */
 package jdplus.tramoseatsx.base.core;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -514,8 +513,8 @@ public class LegacyDecoder extends AbstractDecoder {
 
     private Matrix readExternalMatrix(int n, int nser, String file) {
         try {
-            File f = path == null ? new File(file) : new File(path, file);
-            FileReader reader = new FileReader(f, Charset.defaultCharset());
+            File f = path == null ? Path.of(file).toFile() : path.toPath().resolve(file).toFile();
+            Reader reader = Files.newBufferedReader(f.toPath(), Charset.defaultCharset());
             StringBuilder builder = new StringBuilder();
             char[] data = new char[1024];
             int nr;
