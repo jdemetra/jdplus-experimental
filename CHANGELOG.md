@@ -10,6 +10,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Modernize use of NIO API
+- ![OTHER] Migrate OSSRH to Central Portal
 
 ## [1.0.2] - 2024-04-15
 
