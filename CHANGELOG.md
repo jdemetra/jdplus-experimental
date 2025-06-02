@@ -9,8 +9,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Modernize use of NIO API
+- ![OTHER] Modernize use of NIO API
 - ![OTHER] Migrate OSSRH to Central Portal
+- ![OTHER] Migrate protobuf-maven-plugin from org.xolstice.maven.plugins to io.github.ascopes
 
 ## [1.0.2] - 2024-04-15
 
