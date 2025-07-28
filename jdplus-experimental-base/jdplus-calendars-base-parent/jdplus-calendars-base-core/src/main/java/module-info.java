@@ -9,7 +9,7 @@ module jdplus.calendars.base.core {
     requires static lombok;
     requires static nbbrd.design;
     requires static nbbrd.service;
-    requires static org.checkerframework.checker.qual;
+    requires static org.jspecify;
 
     requires transitive jdplus.calendars.base.api;
     requires jdplus.toolkit.base.core;
