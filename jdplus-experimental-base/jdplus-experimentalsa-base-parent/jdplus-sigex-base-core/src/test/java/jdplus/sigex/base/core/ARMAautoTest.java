@@ -9,7 +9,8 @@ import jdplus.toolkit.base.api.data.DoubleSeq;
 import jdplus.toolkit.base.api.data.Doubles;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
@@ -24,7 +25,7 @@ public class ARMAautoTest {
     public void test1() {
         DoubleSeq acf = ARMAauto.compute(DoubleSeq.of(.25), Doubles.EMPTY, 10);
         //System.out.println(acf);
-        assertEquals(acf.get(0), 1.066666666, 1e-5);
+        assertEquals(1.066666666, acf.get(0), 1e-5);
         assertTrue(acf.allMatch(x->x>0));
     }
     
@@ -32,7 +33,7 @@ public class ARMAautoTest {
     public void test2() {
         DoubleSeq acf = ARMAauto.compute(DoubleSeq.of(-.25), Doubles.EMPTY, 10);
 //        System.out.println(acf);
-        assertEquals(acf.get(0), 1.066666666, 1e-5);
+        assertEquals(1.066666666, acf.get(0), 1e-5);
         assertEquals(acf.get(1)/acf.get(0), -.25, 1e-9);
     }
     
@@ -40,7 +41,7 @@ public class ARMAautoTest {
     public void test3() {
         DoubleSeq acf = ARMAauto.compute(DoubleSeq.of(-.25, .2), DoubleSeq.of(.3, .4), 10);
         System.out.println(acf);
-        assertEquals(acf.get(10), 0.006516581, 1e-5);
+        assertEquals(0.006516581, acf.get(10), 1e-5);
     }
     
 }

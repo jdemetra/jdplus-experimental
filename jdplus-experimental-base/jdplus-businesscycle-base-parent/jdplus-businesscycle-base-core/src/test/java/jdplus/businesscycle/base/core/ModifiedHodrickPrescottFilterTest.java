@@ -20,7 +20,7 @@ import jdplus.toolkit.base.core.ucarima.UcarimaModel;
 import jdplus.toolkit.base.core.ssf.arima.SsfUcarima;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
