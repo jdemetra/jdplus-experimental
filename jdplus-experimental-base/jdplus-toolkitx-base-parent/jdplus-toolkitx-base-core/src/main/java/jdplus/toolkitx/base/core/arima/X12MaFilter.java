@@ -50,7 +50,7 @@ public class X12MaFilter {
     
     private double[] m_u;
 
-    private FastMatrix V, G1, m_X, m_V1;
+    private FastMatrix V, m_X, m_V1;
 
     private double m_t;
 

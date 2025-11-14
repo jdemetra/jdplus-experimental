@@ -18,7 +18,6 @@ package jdplus.toolkitx.base.core.arima;
 import java.util.Random;
 import jdplus.toolkit.base.api.arima.SarimaOrders;
 import jdplus.toolkit.base.api.data.DoubleSeq;
-import jdplus.toolkit.base.api.data.Doubles;
 import jdplus.toolkit.base.api.data.DoublesMath;
 import jdplus.toolkit.base.core.data.DataBlock;
 import jdplus.toolkit.base.core.sarima.SarimaModel;
