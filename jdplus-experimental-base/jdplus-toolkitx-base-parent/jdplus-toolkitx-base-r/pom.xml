@@ -20,8 +20,8 @@
         <!-- compile and runtime -->
         <dependency>
             <groupId>eu.europa.ec.joinup.sat</groupId>
-            <artifactId>jdplus-toolkit-base-r</artifactId>
-            <version>${jdplus-main.version}</version>
+            <artifactId>jdplus-sts-base-r</artifactId>
+            <version>${jdplus-incubator.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.europa.ec.joinup.sat</groupId>

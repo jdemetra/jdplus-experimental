@@ -27,6 +27,11 @@
             <artifactId>jdplus-toolkit-base-core</artifactId>
             <version>${jdplus-main.version}</version>
         </dependency>
+        <dependency>
+            <groupId>eu.europa.ec.joinup.sat</groupId>
+            <artifactId>jdplus-sts-base-core</artifactId>
+            <version>${jdplus-incubator.version}</version>
+        </dependency>
 
        <!-- test only -->
         <dependency>
