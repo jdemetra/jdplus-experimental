@@ -23,8 +23,6 @@ import jdplus.sts.base.api.BsmSpec;
 import jdplus.sts.base.api.Component;
 import jdplus.sts.base.core.BsmData;
 import jdplus.sts.base.core.BsmMapping;
-import jdplus.sts.base.core.BsmOutliersDetection;
-import jdplus.sts.base.core.BsmOutliersDetection2;
 import jdplus.sts.base.core.SsfOutlierDetector;
 import jdplus.toolkit.base.api.data.DoubleSeq;
 import jdplus.toolkit.base.api.math.matrices.Matrix;
