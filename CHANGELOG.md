@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-11-21
+
 This is a feature release of experimental extensions for JDemetra+ v3.  
 [JDemetra+ v3.6.0 or later](https://github.com/jdemetra/jdplus-main) version is required to run it.
 
@@ -48,11 +50,11 @@ This is the **initial release** of experimental extensions for JDemetra+ v3.
 
 - Initial release
 
-[Unreleased]: https://github.com/jdemetra/jdplus-experimental/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/jdemetra/jdplus-experimental/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/jdemetra/jdplus-experimental/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/jdemetra/jdplus-experimental/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/jdemetra/jdplus-experimental/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/jdemetra/jdplus-experimental/releases/tag/v1.0.0
-
 [STAT]: https://img.shields.io/badge/-STAT-068C09
 [OTHER]: https://img.shields.io/badge/-OTHER-e4e669
 [IO]: https://img.shields.io/badge/-IO-F813F7
