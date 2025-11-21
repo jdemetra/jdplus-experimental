@@ -7,7 +7,22 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-11-21
+
+This is a feature release of experimental extensions for JDemetra+ v3.  
+[JDemetra+ v3.6.0 or later](https://github.com/jdemetra/jdplus-main) version is required to run it.
+
+### Changed
+
+- ![OTHER] Modernize use of NIO API
+- ![OTHER] Migrate OSSRH to Central Portal
+- ![OTHER] Migrate protobuf-maven-plugin from org.xolstice.maven.plugins to io.github.ascopes
+- ![OTHER] Bump jdplus-main from 3.2.2 to [3.6.0](https://github.com/jdemetra/jdplus-main/releases/tag/v3.6.0)
+
 ## [1.0.2] - 2024-04-15
+
+This is a bugfix release of experimental extensions for JDemetra+ v3.  
+[JDemetra+ v3.2.2 or later](https://github.com/jdemetra/jdplus-main) version is required to run it.
 
 ### Fixed
 
@@ -22,16 +37,24 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 This is a bugfix release for the failed deployment of v1.0.0.  
 See v1.0.0 for complete changelog.
 
+### Fixed
+
+- Fix failed deployment of v1.0.0
+
 ## [1.0.0] - 2023-06-15
 
 This is the **initial release** of experimental extensions for JDemetra+ v3.  
 [JDemetra+ v3.0.2 or later](https://github.com/jdemetra/jdplus-main) version is required to run it.
 
-[Unreleased]: https://github.com/jdemetra/jdplus-experimental/compare/v1.0.2...HEAD
+### Added
+
+- Initial release
+
+[Unreleased]: https://github.com/jdemetra/jdplus-experimental/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/jdemetra/jdplus-experimental/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/jdemetra/jdplus-experimental/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/jdemetra/jdplus-experimental/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/jdemetra/jdplus-experimental/releases/tag/v1.0.0
-
 [STAT]: https://img.shields.io/badge/-STAT-068C09
 [OTHER]: https://img.shields.io/badge/-OTHER-e4e669
 [IO]: https://img.shields.io/badge/-IO-F813F7

@@ -8,7 +8,7 @@ package jdplus.sigex.base.core;
 import jdplus.toolkit.base.core.arima.AutoCovarianceFunction;
 import jdplus.toolkit.base.api.data.DoubleSeq;
 import jdplus.toolkit.base.core.math.polynomials.Polynomial;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import lombok.NonNull;
 
 /**
  *

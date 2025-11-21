@@ -10,6 +10,7 @@ import jdplus.calendars.base.core.internal.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntFunction;
 import jdplus.toolkit.base.core.modelling.regression.MovingHolidayProvider;
 import nbbrd.service.ServiceProvider;
 
@@ -21,11 +22,38 @@ import nbbrd.service.ServiceProvider;
 public class IslamicMovingHolidays {
 
     public LocalDate[] rasElAm(LocalDate start, LocalDate end) {
+       return holidays(start, end, y->Islamic.rasElAm(y));
+    }
+
+    public LocalDate[] aidelAdha(LocalDate start, LocalDate end) {
+       return holidays(start, end, y->Islamic.aidelAdha(y));
+    }
+
+    public LocalDate[] aidelFitr(LocalDate start, LocalDate end) {
+       return holidays(start, end, y->Islamic.aidelFitr(y));
+    }
+
+    public LocalDate[] achoura(LocalDate start, LocalDate end) {
+        return holidays(start, end, y->Islamic.achoura(y));
+    }
+    
+    public LocalDate[] magaldeTouba(LocalDate start, LocalDate end) {
+        return holidays(start, end, y->Islamic.magaldeTouba(y));
+    }
+    
+    public LocalDate[] mawlidAnNabi(LocalDate start, LocalDate end) {
+        return holidays(start, end, y->Islamic.mawlidAnNabi(y));
+    }
+    
+    public LocalDate[] startRamadan(LocalDate start, LocalDate end) {
+        return holidays(start, end, y->Islamic.startRamadan(y));
+    }
+    
+    public LocalDate[] holidays(LocalDate start, LocalDate end, IntFunction<long[]> fn) {
         int y0 = start.getYear();
         int y1 = end.getYear();
-        int n = y1 - y0 + 1;
         List<LocalDate> all = new ArrayList<>();
-        long[] l = Islamic.rasElAm(y0);
+        long[] l = fn.apply(y0);
         if (y0 == y1) {
             for (int i = 0; i < l.length; ++i) {
                 LocalDate d = Date.fixedToLocalDate(l[i]);
@@ -41,12 +69,12 @@ public class IslamicMovingHolidays {
                 }
             }
             for (int y = y0 + 1; y < y1; ++y) {
-                l = Islamic.rasElAm(y);
+                l = fn.apply(y);
                 for (int i = 0; i < l.length; ++i) {
                     all.add(Date.fixedToLocalDate(l[i]));
                 }
             }
-            l = Islamic.rasElAm(y1);
+            l = fn.apply(y1);
             for (int i = 0; i < l.length; ++i) {
                 LocalDate d = Date.fixedToLocalDate(l[i]);
                 if (d.isBefore(end)) {
@@ -54,9 +82,9 @@ public class IslamicMovingHolidays {
                 }
             }
         }
-        return all.toArray(new LocalDate[all.size()]);
+        return all.toArray(LocalDate[]::new);
     }
-
+ 
     private final String RASELAM = "islamic.raselam";
 
     @ServiceProvider(MovingHolidayProvider.class)
