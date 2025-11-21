@@ -7,13 +7,20 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+This is a feature release of experimental extensions for JDemetra+ v3.  
+[JDemetra+ v3.6.0 or later](https://github.com/jdemetra/jdplus-main) version is required to run it.
+
 ### Changed
 
 - ![OTHER] Modernize use of NIO API
 - ![OTHER] Migrate OSSRH to Central Portal
 - ![OTHER] Migrate protobuf-maven-plugin from org.xolstice.maven.plugins to io.github.ascopes
+- ![OTHER] Bump jdplus-main from 3.2.2 to [3.6.0](https://github.com/jdemetra/jdplus-main/releases/tag/v3.6.0)
 
 ## [1.0.2] - 2024-04-15
+
+This is a bugfix release of experimental extensions for JDemetra+ v3.  
+[JDemetra+ v3.2.2 or later](https://github.com/jdemetra/jdplus-main) version is required to run it.
 
 ### Fixed
 
