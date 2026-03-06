@@ -63,7 +63,7 @@
         <jd2.version>2.2.6</jd2.version>
         <jdplus-main.version>3.6.0</jdplus-main.version>
         <jdplus-incubator.version>2.4.0</jdplus-incubator.version>
-        <!--protobuf.version>3.21.12</protobuf.version-->
+        <protobuf.version>3.21.12</protobuf.version>
     </properties>
 
     <modules>
@@ -270,7 +270,7 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <configuration>
                     <!-- 1.4 Configure protoc -->
-                    <protocVersion>${protobuf.version}</protocVersion>
+                    <protoc>${protobuf.version}</protoc>
                     <!-- 1.5 Embed proto definitions in jars and don't fail on missing sources -->
                     <embedSourcesInClassOutputs>true</embedSourcesInClassOutputs>
                     <failOnMissingSources>false</failOnMissingSources>
