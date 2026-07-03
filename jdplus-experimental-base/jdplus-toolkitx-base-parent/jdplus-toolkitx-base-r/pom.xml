@@ -22,6 +22,16 @@
             <groupId>eu.europa.ec.joinup.sat</groupId>
             <artifactId>jdplus-sts-base-r</artifactId>
             <version>${jdplus-incubator.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>jdplus-toolkit-base-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>jdplus-toolkit-base-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>eu.europa.ec.joinup.sat</groupId>
